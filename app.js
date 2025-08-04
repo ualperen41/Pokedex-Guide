@@ -1,3 +1,10 @@
+ const poke_container =document.querySelector(".poke-container");
+const search = document.querySelector(".search");
+const searchInput = document.querySelector(".searchInput");
+const searchBtn = document.querySelector(".searchBtn");
+
+const pokemon_count =151;
+
 const bg_color = {
   grass: '#8BD369',
   fire: '#FF603F',
@@ -15,3 +22,51 @@ const bg_color = {
   dragon: '#7766EE',
   ice: '#66CCFF',
 }
+
+searchBtn.addEventListener("click",() => {
+  search.classList.toggle("active");
+});
+
+const fetchPokemons = async () => {
+  for (let i=1; i <= pokemon_count; i++){
+    await getPokemon(i)
+  };
+};
+
+const getPokemon = async (id) => {
+  const url = `https://pokeapi.co/api/v2/pokemon/${id}`;
+  const res = await fetch(url);
+  const data = await res.json();
+   console.log(data);
+  createPokemonCard(data);
+}
+ const createPokemonCard = (pokemon) => {
+  const pokemonDiv = document.createElement("div")
+  pokemonDiv.classList.add("pokemon")
+const pokemonId = pokemon.id.toString().padStart(3, '0')
+  const pokemonDivInnerHTML = ` <div class="image-container">
+                     <img
+              src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png"
+              alt="Pokemon 1 image"
+            />
+
+        </div>
+        <div class="poke-info">
+          <span class="poke-id">#${pokemon.Id}</span>
+          <h3 class="poke-name">${pokemon.name}</h3>
+          <div class="small">
+            <small class="poke-exp">
+              <i class="fa solid fa-flask"></i>100 exp
+            </small>
+            <small class="poke-weight"
+              ><i class="fa solid fa-flask"></i>300 kg</small
+            >
+          </div>
+          <div class="poke-type">
+            <i class="fa-brands fa-uncharted"></i>grass
+          </div>
+        </div>`
+        pokemonDiv.innerHTML =pokemonDivInnerHTML
+        poke_container.appendChild(pokemonDiv)
+ }
+fetchPokemons();
